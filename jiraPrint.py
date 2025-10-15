@@ -12,6 +12,8 @@ jiraHost = "atlassian.net"
 jiraUsername = ""
 jiraPassword = ""
 
+jiraSearchJql = 'project = "" AND key = ""'
+
 url = jiraHost+"/rest/api/3/search/jql"
 
 auth = HTTPBassicAuth(jiraUsername, jiraPassword)
@@ -21,4 +23,17 @@ headers = {
   "Content-Type": "application/json"
 }
 
-jiraSearchJql = 'project = "" AND key = ""'
+query = {
+  'jql': jiraSearchJql,
+  'fields': '*all'
+}
+
+response = requests.request(
+  "GET",
+  url,
+  headers=headers,
+  params=query,
+  auth=auth
+)
+
+print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
